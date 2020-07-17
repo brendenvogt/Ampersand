@@ -30,7 +30,14 @@ extension FontProvider: FontProviding {
                 return UIFont.preferredFont(forTextStyle: style, compatibleWith: traitCollection)
         }
         
-        return UIFontMetrics(forTextStyle: style).scaledFont(for: font, compatibleWith: traitCollection)
+        if #available(iOS 11.0, *) {
+            return UIFontMetrics(forTextStyle: style).scaledFont(for: font, compatibleWith: traitCollection)
+        } else {
+            if let font = UIFont(name: fontDescription.fontName, size: fontDescription.pointSize) {
+                return font
+            }
+            return UIFont.preferredFont(forTextStyle: style, compatibleWith: traitCollection)
+        }
     }
     
     public func nonScalingFont(forTextStyle style: UIFont.TextStyle) -> UIFont {
